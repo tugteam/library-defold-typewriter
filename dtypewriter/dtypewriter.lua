@@ -170,10 +170,10 @@ function dtypewriter.load(text)
 	local character_color = _default_color
 	local character_speed = _default_type_speed
 	while character_index <= #text do
-		local character = string.sub(text, character_index, character_index)
+		local character = utf8.sub(text, character_index, character_index)
 		if character == " " then
 			local chunk_type = "content"
-			local chunk_text = string.sub(text, chunk_start_index, character_index - 1)
+			local chunk_text = utf8.sub(text, chunk_start_index, character_index - 1)
 			local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
 			add_chunk(chunk_type, chunk_data)
 			chunk_type = "space"
@@ -184,14 +184,14 @@ function dtypewriter.load(text)
 			chunk_start_index = character_index + 1
 			character_index = character_index + 1
 		elseif character == "<" then
-			if string.sub(text, character_index, character_index + 6) == "<color=" then
-				local color_start_index, color_end_index = string.find(text, "%l+", character_index + 7)
-				local color_name = string.sub(text, color_start_index, color_end_index)
+			if utf8.sub(text, character_index, character_index + 6) == "<color=" then
+				local color_start_index, color_end_index = utf8.find(text, "%l+", character_index + 7)
+				local color_name = utf8.sub(text, color_start_index, color_end_index)
 				character_color = (color_name == "default" or not _colors[color_name]) and _default_color or _colors[color_name]
-				text = string.sub(text, 1, character_index - 1) .. string.sub(text, color_end_index + 2)
-			elseif string.sub(text, character_index, character_index + 6) == "<speed=" then
-				local speed_start_index, speed_end_index = string.find(text, "%d*%l*", character_index + 7)
-				local speed_text = string.sub(text, speed_start_index, speed_end_index)
+				text = utf8.sub(text, 1, character_index - 1) .. utf8.sub(text, color_end_index + 2)
+			elseif utf8.sub(text, character_index, character_index + 6) == "<speed=" then
+				local speed_start_index, speed_end_index = utf8.find(text, "%d*%l*", character_index + 7)
+				local speed_text = utf8.sub(text, speed_start_index, speed_end_index)
 				if speed_text == "default" then
 					character_speed = _default_type_speed
 				elseif speed_text == "instant" then
@@ -199,19 +199,19 @@ function dtypewriter.load(text)
 				else
 					character_speed = speed_text
 				end
-				text = string.sub(text, 1, character_index - 1) .. string.sub(text, speed_end_index + 2)
-			elseif string.sub(text, character_index, character_index + 5) == "<line>" then
+				text = utf8.sub(text, 1, character_index - 1) .. utf8.sub(text, speed_end_index + 2)
+			elseif utf8.sub(text, character_index, character_index + 5) == "<line>" then
 				local chunk_type = "content"
-				local chunk_text = string.sub(text, chunk_start_index, character_index - 1)
+				local chunk_text = utf8.sub(text, chunk_start_index, character_index - 1)
 				local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
 				add_chunk(chunk_type, chunk_data)
 				chunk_type = "line"
 				add_chunk(chunk_type)
 				chunk_start_index = character_index + 6
 				character_index = character_index + 6
-			elseif string.sub(text, character_index, character_index + 10) == "<paragraph>" then
+			elseif utf8.sub(text, character_index, character_index + 10) == "<paragraph>" then
 				local chunk_type = "content"
-				local chunk_text = string.sub(text, chunk_start_index, character_index - 1)
+				local chunk_text = utf8.sub(text, chunk_start_index, character_index - 1)
 				local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
 				add_chunk(chunk_type, chunk_data)
 				chunk_type = "paragraph"
@@ -223,7 +223,7 @@ function dtypewriter.load(text)
 			add_character(#_chunks + 1, character, character_color, character_speed)
 			if character_index == #text then
 				local chunk_type = "content"
-				local chunk_text = string.sub(text, chunk_start_index, character_index)
+				local chunk_text = utf8.sub(text, chunk_start_index, character_index)
 				local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
 				add_chunk(chunk_type, chunk_data)
 			end
